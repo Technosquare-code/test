@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Angiveer GD Real Mock Test</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #eef2f7;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.timer {
+    text-align: right;
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.question {
+    margin-bottom: 18px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+button {
+    padding: 12px 25px;
+    background: #8c52ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.result-box {
+    background: #f1f5ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🇮🇳 Angiveer GD Real Mock Test</h1>
+<div class="timer">⏱ समय शेष: <span id="time">15:00</span></div>
+
+<form id="quizForm"></form>
+
+<button onclick="submitExam()">Submit</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+// QUESTIONS
+let questions = [
+{q:"1857 की क्रांति का प्रमुख केंद्र कहाँ था?", o:["दिल्ली","मेरठ","कानपुर","लखनऊ"], a:1},
+{q:"संविधान का कौन सा अनुच्छेद मौलिक अधिकारों से संबंधित है?", o:["12-35","36-51","52-78","80-100"], a:0},
+{q:"यदि 3x + 2 = 17, तो x=?", o:["3","5","7","9"], a:1},
+{q:"श्रृंखला: 2, 6, 7, 21, 22, ?", o:["44","66","46","67"], a:1},
+{q:"किस धातु का गलनांक सबसे अधिक होता है?", o:["लोहा","तांबा","टंगस्टन","एल्यूमिनियम"], a:2},
+{q:"A : Z :: B : ?", o:["Y","X","W","V"], a:0},
+{q:"CAG की नियुक्ति कौन करता है?", o:["प्रधानमंत्री","राष्ट्रपति","लोकसभा","राज्यसभा"], a:1},
+{q:"5 लोग 10 दिन में काम करते हैं, 10 लोग कितने दिन में?", o:["5","10","2","8"], a:0},
+{q:"DNA का कार्य?", o:["ऊर्जा","आनुवंशिक","श्वसन","रक्त"], a:1},
+{q:"12% of 250=?", o:["25","30","35","40"], a:1},
+{q:"Green Revolution किससे जुड़ा है?", o:["दूध","अनाज","मछली","ऊर्जा"], a:1},
+{q:"TRAIN = UQBJO, PLANE = ?", o:["QMBOD","QMBOF","QMBNF","QMBPF"], a:0},
+{q:"ऊपरी सदन?", o:["लोकसभा","राज्यसभा","विधानसभा","पंचायत"], a:1},
+{q:"40% = 80, total?", o:["200","160","180","220"], a:0},
+{q:"Fire extinguisher में गैस?", o:["O2","CO2","N2","H2"], a:1},
+{q:"1,4,9,16,?", o:["20","24","25","30"], a:2},
+{q:"Quit India Movement?", o:["1940","1942","1945","1930"], a:1},
+{q:"8 आदमी 6 दिन → 4 आदमी?", o:["12","10","8","6"], a:0},
+{q:"CPU full form?", o:["Central Process Unit","Central Processing Unit","Computer Unit","Control Unit"], a:1},
+{q:"सबसे ज्यादा जनसंख्या?", o:["बिहार","महाराष्ट्र","UP","MP"], a:2},
+{q:"5:x = 20:80", o:["15","20","25","30"], a:1},
+{q:"Acid?", o:["NaOH","HCl","KOH","CaO"], a:1},
+{q:"AZ, BY, CX, ?", o:["DW","DV","EW","DX"], a:0},
+{q:"पहले राष्ट्रपति?", o:["नेहरू","राजेंद्र प्रसाद","गांधी","पटेल"], a:1},
+{q:"20% profit = 120 SP, CP?", o:["100","90","80","110"], a:0}
+];
+
+// SHUFFLE
+questions.sort(() => Math.random() - 0.5);
+
+const form = document.getElementById("quizForm");
+
+questions.forEach((q, i) => {
+    let div = document.createElement("div");
+    div.className = "question";
+
+    div.innerHTML = `<b>Q${i+1}. ${q.q}</b><br>` +
+        q.o.map((opt, j) =>
+            `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`
+        ).join("");
+
+    form.appendChild(div);
+});
+
+
+// TIMER 15 MIN
+let time = 900;
+
+let timer = setInterval(() => {
+
+    let m = Math.floor(time / 60);
+    let s = time % 60;
+
+    document.getElementById("time").innerText =
+        `${m}:${s < 10 ? '0'+s : s}`;
+
+    time--;
+
+    if (time < 0) {
+        clearInterval(timer);
+        submitExam();
+    }
+
+}, 1000);
+
+
+// SUBMIT
+function submitExam() {
+
+    clearInterval(timer);
+
+    let score = 0;
+    let correct = 0;
+    let wrong = 0;
+    let attempted = 0;
+
+    questions.forEach((q, i) => {
+        let ans = document.querySelector(`input[name="q${i}"]:checked`);
+
+        if (ans) {
+            attempted++;
+
+            if (parseInt(ans.value) === q.a) {
+                score += 1;
+                correct++;
+            } else {
+                score -= 0.25;
+                wrong++;
+            }
+        }
+    });
+
+    let accuracy = attempted ? ((correct / attempted) * 100).toFixed(2) : 0;
+
+    document.getElementById("result").innerHTML = `
+        <div class="result-box">
+        <h2>📊 Result</h2>
+        <p>✅ Correct: ${correct}</p>
+        <p>❌ Wrong: ${wrong}</p>
+        <p>📝 Attempted: ${attempted}</p>
+        <p>🎯 Score: <b>${score.toFixed(2)} / 25</b></p>
+        <p>📈 Accuracy: ${accuracy}%</p>
+        </div>
+    `;
+
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+</script>
+
+</body>
+</html>
