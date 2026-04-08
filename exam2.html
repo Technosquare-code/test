@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Angiveer GD EXTREME TEST - NEW SET</title>
+
+<style>
+body {font-family: Arial;background:#eef2f7;padding:20px;}
+.container {max-width:900px;margin:auto;background:#fff;padding:25px;border-radius:12px;}
+h1{text-align:center;}
+.timer{color:red;text-align:right;font-size:20px;font-weight:bold;}
+.question{margin-bottom:15px;border-bottom:1px solid #ddd;padding:10px;}
+button{padding:12px 25px;background:#8c52ff;color:#fff;border:none;border-radius:6px;}
+.result-box{background:#f1f5ff;padding:15px;border-radius:10px;margin-top:20px;}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+<h1>🔥 Angiveer GD EXTREME TEST (NEW SET)</h1>
+<div class="timer">⏱ समय: <span id="time">30:00</span></div>
+
+<form id="quizForm"></form>
+
+<button onclick="submitExam()">Submit</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+
+let questions = [
+{q:"यदि 2x + 3y = 13 और x = 2, तो y=?",o:["3","2","1","4"],a:0},
+{q:"श्रृंखला: 7,14,28,56,?",o:["84","96","112","128"],a:2},
+{q:"किस तत्व का परमाणु क्रमांक 1 है?",o:["H","O","C","N"],a:0},
+{q:"भारतीय संविधान में कुल अनुसूचियाँ कितनी हैं?",o:["8","10","12","14"],a:2},
+{q:"यदि 45 का 20%=?",o:["9","8","7","6"],a:0},
+{q:"कौन सा देश SAARC का सदस्य नहीं है?",o:["भारत","नेपाल","चीन","भूटान"],a:2},
+{q:"यदि x² = 49, x=?",o:["±7","±6","±5","±8"],a:0},
+{q:"A=2, B=4, C=6, DOG=?",o:["26","28","30","32"],a:0},
+{q:"कौन सा विटामिन खून जमाने में मदद करता है?",o:["A","B","K","C"],a:2},
+{q:"यदि 25% = 50, कुल=?",o:["200","150","100","250"],a:0},
+
+{q:"श्रृंखला: 3,6,18,72,?",o:["216","288","360","432"],a:1},
+{q:"भारत में योजना आयोग कब समाप्त हुआ?",o:["2012","2014","2015","2016"],a:2},
+{q:"कौन सा तत्व धातु नहीं है?",o:["Na","K","S","Fe"],a:2},
+{q:"यदि 8 आदमी 12 दिन में काम करते हैं, 6 आदमी?",o:["16","14","18","20"],a:0},
+{q:"sin 90°=?",o:["0","1","-1","1/2"],a:1},
+{q:"भारत का सबसे ऊँचा पर्वत?",o:["K2","एवरेस्ट","नंदा देवी","कंचनजंघा"],a:0},
+{q:"यदि 3x = 27, x=?",o:["9","6","3","12"],a:0},
+{q:"CO का पूरा नाम?",o:["Carbon Oxide","Carbon Monoxide","Carbon Dioxide","None"],a:1},
+{q:"श्रृंखला: 5,11,17,23,?",o:["29","28","30","31"],a:0},
+{q:"यदि CP=80, SP=100, लाभ %?",o:["20","25","30","15"],a:1},
+
+{q:"भारत के वर्तमान राष्ट्रपति?",o:["रामनाथ कोविंद","द्रौपदी मुर्मू","मनमोहन सिंह","मोदी"],a:1},
+{q:"यदि 6² + 8²=?",o:["100","90","80","70"],a:0},
+{q:"कौन सा तत्व विद्युत का अच्छा चालक है?",o:["लकड़ी","प्लास्टिक","तांबा","कांच"],a:2},
+{q:"श्रृंखला: 2,3,5,7,11,?",o:["13","15","17","19"],a:0},
+{q:"यदि 50% = 200, कुल?",o:["300","400","500","600"],a:1},
+{q:"भारत का राष्ट्रीय वृक्ष?",o:["नीम","बरगद","पीपल","आम"],a:1},
+{q:"x+5=12, x=?",o:["7","6","5","8"],a:0},
+{q:"कौन सा देश BRICS में नहीं है?",o:["भारत","चीन","USA","रूस"],a:2},
+{q:"यदि 100 का 15%=?",o:["10","15","20","25"],a:1},
+{q:"श्रृंखला: 4,6,9,13,?",o:["18","17","16","19"],a:0},
+
+{q:"भारत का पहला उपग्रह?",o:["आर्यभट्ट","भास्कर","रोहिणी","INSAT"],a:0},
+{q:"यदि 9x=81, x=?",o:["9","8","7","6"],a:0},
+{q:"कौन सा तत्व गैस है?",o:["Cl","Fe","Cu","Ag"],a:0},
+{q:"श्रृंखला: 1,3,6,10,15,?",o:["21","20","19","18"],a:0},
+{q:"यदि 80% = 160, कुल?",o:["200","220","240","180"],a:0},
+{q:"भारत का राष्ट्रीय फल?",o:["सेब","केला","आम","अंगूर"],a:2},
+{q:"यदि 4x=20, x=?",o:["5","4","6","7"],a:0},
+{q:"कौन सा ग्रह सबसे बड़ा है?",o:["पृथ्वी","मंगल","बृहस्पति","शुक्र"],a:2},
+{q:"यदि 7²=?",o:["49","42","36","56"],a:0},
+{q:"श्रृंखला: 10,20,30,?",o:["40","50","60","70"],a:0},
+
+{q:"भारत का राष्ट्रीय पशु?",o:["शेर","बाघ","हाथी","घोड़ा"],a:1},
+{q:"यदि 12×12=?",o:["144","124","132","156"],a:0},
+{q:"कौन सा तत्व तरल है?",o:["Br","Fe","Cu","Na"],a:0},
+{q:"श्रृंखला: 100,80,60,?",o:["40","50","30","20"],a:0},
+{q:"यदि 2x=50, x=?",o:["25","20","15","30"],a:0},
+{q:"भारत का राष्ट्रीय पक्षी?",o:["मोर","तोता","कबूतर","गरुड़"],a:0},
+{q:"यदि 5²=?",o:["25","20","30","35"],a:0},
+{q:"कौन सा विटामिन आँखों के लिए?",o:["A","B","C","D"],a:0},
+{q:"श्रृंखला: 2,6,18,54,?",o:["162","150","140","130"],a:0},
+{q:"यदि 1000 का 10%=?",o:["100","200","300","400"],a:0}
+];
+
+// shuffle
+questions.sort(()=>Math.random()-0.5);
+
+const form=document.getElementById("quizForm");
+
+questions.forEach((q,i)=>{
+let div=document.createElement("div");
+div.className="question";
+div.innerHTML=`<b>Q${i+1}. ${q.q}</b><br>`+
+q.o.map((opt,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`).join("");
+form.appendChild(div);
+});
+
+// timer 30 min
+let time=1800;
+
+let timer=setInterval(()=>{
+let m=Math.floor(time/60);
+let s=time%60;
+document.getElementById("time").innerText=`${m}:${s<10?'0'+s:s}`;
+time--;
+if(time<0){clearInterval(timer);submitExam();}
+},1000);
+
+// submit
+function submitExam(){
+clearInterval(timer);
+
+let score=0,correct=0,wrong=0,attempt=0;
+
+questions.forEach((q,i)=>{
+let ans=document.querySelector(`input[name="q${i}"]:checked`);
+if(ans){
+attempt++;
+if(parseInt(ans.value)===q.a){score+=1;correct++;}
+else{score-=0.25;wrong++;}
+}
+});
+
+let acc=attempt?((correct/attempt)*100).toFixed(2):0;
+
+document.getElementById("result").innerHTML=`
+<div class="result-box">
+<h2>📊 RESULT</h2>
+<p>✅ Correct: ${correct}</p>
+<p>❌ Wrong: ${wrong}</p>
+<p>📝 Attempted: ${attempt}</p>
+<p>🎯 Score: <b>${score.toFixed(2)} / 50</b></p>
+<p>📈 Accuracy: ${acc}%</p>
+</div>`;
+window.scrollTo(0,document.body.scrollHeight);
+}
+
+</script>
+
+</body>
+</html>
